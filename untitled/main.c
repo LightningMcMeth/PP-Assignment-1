@@ -1,61 +1,95 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <stdbool.h>
 
 int main() {
 
     int commandType;
-    char userTextInput[100];
+    char userInput[100];
     int nullPointer = 0;
-    //const int TextInputLimit;
 
-    printf("Choose a command:\n");
-    scanf_s("%i", &commandType);
+    char *userTextInput;
+    char arrCapacity = 100;
+    int arrSize = 0;
+    userTextInput = (char *) malloc(arrCapacity * sizeof(char));
 
-    switch (commandType){
-        case 1:
+    if(userTextInput == NULL)
+    {
+        printf("memory allocation went bruh\n");
+        return 1;
+    }
 
-            printf("Enter text to append:");
-            scanf_s("%99s", &userTextInput, sizeof(userTextInput));
-            strcat(userTextInput, '\0');
-            break;
-        case 2:
-            //untested
-            for (int i = 0; i < sizeof(userTextInput); ++i)
-            {
-                if (userTextInput[i] == '\0')
-                {
-                    nullPointer = i;
-                    break;
+    printf("Testing\n");
+
+
+    bool loopBreaker = true;
+    while(loopBreaker)
+    {
+        printf("Choose a command:\n");
+        scanf_s("%i", &commandType);
+
+        switch (commandType) {
+            case 1:
+
+                printf("Enter text to append:");
+
+                scanf_s("%i", &userTextInput);
+
+                if (strlen(userTextInput) >= arrCapacity / 2) {
+                    arrCapacity *= 2;
+                    userTextInput = (char *) realloc(userTextInput, arrCapacity * sizeof(char));
                 }
-            }
 
-            userTextInput[nullPointer] = '\n';
-            strcat(userTextInput, '\0');
-        case 3:
-            printf("Command not implemented yet.");
-        case 4:
-            printf("Command not implemented yet.");
-        case 5:
+                scanf_s("%99s", &userTextInput, sizeof(userInput));
+                //printf("Your text: ", userInput);
 
-            for (int i = 0; i < sizeof(userTextInput); ++i)
-            {
-                printf("%c", userTextInput[i]);
+                //strcat(userTextInput, userInput);
+                //arrSize = strlen(userTextInput); //don't know why this is flagged as a warning
 
-                if(userTextInput[i]=='\0')
-                {
-                    break;
+                printf("Text appended successfully:\n", userTextInput);
+
+                break;
+            case 2:
+                //untested
+                for (int i = 0; i < sizeof(userInput); ++i) {
+                    if (userInput[i] == '\0') {
+                        nullPointer = i;
+                        break;
+                    }
                 }
-            }
-            break;
-        case 6:
-            printf("Command not implemented yet.");
-            break;
-        case 7:
-            printf("Command not implemented yet.");
-            break;
-        default:
-            printf("Yea no I don't know that command.\n");
-            break;
+
+                userInput[nullPointer] = '\n';
+                strcat(userInput, '\0');
+
+                break;
+            case 3:
+                printf("Command not implemented yet.");
+            case 4:
+                printf("Command not implemented yet.");
+            case 5:
+
+                for (int i = 0; i < sizeof(userInput); ++i) {
+                    printf("%c", userInput[i]);
+
+                    if (userInput[i] == '\0') {
+                        break;
+                    }
+                }
+                break;
+            case 6:
+                printf("Command not implemented yet.");
+                break;
+            case 7:
+                printf("Command not implemented yet.");
+                break;
+            case 8:
+                loopBreaker = false;
+                break;
+            default:
+                printf("Yea no I don't know that command.\n");
+                break;
+        }
     }
 
     return 0;
