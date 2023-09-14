@@ -1,3 +1,0 @@
-C:/Users/Gamer/Documents/gamer directories/PP-Assignment-1/cmake-build-debug/CMakeFiles/PP_Assignment_1.dir
-C:/Users/Gamer/Documents/gamer directories/PP-Assignment-1/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Gamer/Documents/gamer directories/PP-Assignment-1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
