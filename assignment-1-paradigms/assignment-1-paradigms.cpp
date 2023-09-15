@@ -9,59 +9,54 @@
 1. Append user text input properly
 2. Add newline command
 3. 
+
+https://www.youtube.com/watch?v=wL2FHiBSh2E&ab_channel=UBCECESS
 */
 
 int main() {
 
-    int commandType;
+    int commandType = 0;
+    int* pcommandType = &commandType;
 
-    char userInput[100];
-    char userText[100];
+    char userInput[100] = "";
+    char userText[100] = "";
 
     int textLength = 0;
-    int nullPointer = 0;
 
-    bool loopBreaker = true;
-    while (loopBreaker)
+    while (1)
     {
         printf("\nChoose a command:\n");
         scanf_s("%d", &commandType);
 
-        switch (commandType) {
+        switch (*pcommandType){
         case 1:
 
             printf("Enter text to append:");
             fgets(userInput, sizeof(userInput), stdin);
 
-            if (textLength + strlen(userInput) <= 100) {
-                strcat(userText, userInput);
+
+
+            if (textLength + atoi(userInput) <= 100) {
+                strcat_s(userText, userInput);
                 textLength += strlen(userInput);
             }
+            else {
+                printf("\ncringe\n");
+            }
 
-            //scanf_s("%99s", userInput, sizeof(userInput));
-
-            printf("Text appended successfully: ");
+            printf("\nText appended successfully: ");
             printf("%s", userInput);
-
 
             break;
         case 2:
-            //untested
-            for (int i = 0; i < sizeof(userInput); ++i) {
-                if (userInput[i] == '\0') {
-                    nullPointer = i;
-                    break;
-                }
-            }
-
-            userInput[nullPointer] = '\n';
-            //strcat(userInput, '\0');
-
+            printf("Command not implemented yet.");
             break;
         case 3:
             printf("Command not implemented yet.");
+            break;
         case 4:
             printf("Command not implemented yet.");
+            break;
         case 5:
 
             for (int i = 0; i < sizeof(userInput); ++i) {
@@ -79,7 +74,6 @@ int main() {
             printf("Command not implemented yet.");
             break;
         case 8:
-            loopBreaker = false;
             break;
         default:
             printf("Yea no I don't know that command.\n");

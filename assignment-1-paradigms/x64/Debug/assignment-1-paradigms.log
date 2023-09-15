@@ -1,4 +1,1 @@
-﻿  assignment-1-paradigms.cpp
-C:\Users\Gamer\source\repos\assignment-1-paradigms\assignment-1-paradigms\assignment-1-paradigms.cpp(28,21): warning C4477: 'scanf_s' : format string '%99s' requires an argument of type 'unsigned int', but variadic argument 2 has type 'size_t'
-C:\Users\Gamer\source\repos\assignment-1-paradigms\assignment-1-paradigms\assignment-1-paradigms.cpp(28,21): message : this argument is used as a buffer size
-  assignment-1-paradigms.vcxproj -> C:\Users\Gamer\source\repos\assignment-1-paradigms\x64\Debug\assignment-1-paradigms.exe
+﻿LINK : fatal error LNK1168: cannot open C:\Users\Gamer\Documents\gamer directories\PP-Assignment-1\x64\Debug\assignment-1-paradigms.exe for writing
