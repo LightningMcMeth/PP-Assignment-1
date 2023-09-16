@@ -28,11 +28,15 @@ int main() {
         printf("\nChoose a command:\n");
         scanf_s("%d", &commandType);
 
+        getchar();
         switch (*pcommandType){
         case 1:
 
             printf("Enter text to append:");
+            //scanf_s("%99[^\n]", sizeof(userInput), userInput);
             fgets(userInput, sizeof(userInput), stdin);
+
+            //fgets(userInput, sizeof(userInput), stdin);
 
 
 
