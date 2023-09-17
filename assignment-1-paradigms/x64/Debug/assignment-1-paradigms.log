@@ -1,1 +1,3 @@
-﻿LINK : fatal error LNK1168: cannot open C:\Users\Gamer\Documents\gamer directories\PP-Assignment-1\x64\Debug\assignment-1-paradigms.exe for writing
+﻿  assignment-1-paradigms.cpp
+C:\Users\Gamer\Documents\gamer directories\PP-Assignment-1\assignment-1-paradigms\assignment-1-paradigms.cpp(40,37): warning C4267: '+=': conversion from 'size_t' to 'int', possible loss of data
+  assignment-1-paradigms.vcxproj -> C:\Users\Gamer\Documents\gamer directories\PP-Assignment-1\x64\Debug\assignment-1-paradigms.exe

@@ -31,18 +31,17 @@ int main() {
         getchar();
         switch (*pcommandType){
         case 1:
-
+            
             printf("Enter text to append:");
-            //scanf_s("%99[^\n]", sizeof(userInput), userInput);
             fgets(userInput, sizeof(userInput), stdin);
 
-            //fgets(userInput, sizeof(userInput), stdin);
-
-
-
             if (textLength + atoi(userInput) <= 100) {
-                strcat_s(userText, userInput);
+                //strcat_s(userText, userInput);
                 textLength += strlen(userInput);
+
+                userInput[textLength - 1] = '\0';
+
+                strcat_s(userText, userInput);
             }
             else {
                 printf("\ncringe\n");
@@ -53,23 +52,22 @@ int main() {
 
             break;
         case 2:
-            printf("Command not implemented yet.");
+            for (int i = 0; i < sizeof(userText); ++i) {
+                printf("%c", userText[i]);
+            }
             break;
         case 3:
-            printf("Command not implemented yet.");
+            
+            if (textLength < 100) {
+                userText[textLength - 1] = '\n';
+            }
+            printf("Newline added successfully.\n");
             break;
         case 4:
             printf("Command not implemented yet.");
             break;
         case 5:
-
-            for (int i = 0; i < sizeof(userInput); ++i) {
-                printf("%c", userInput[i]);
-
-                if (userInput[i] == '\0') {
-                    break;
-                }
-            }
+            printf("Command not implemented yet.");
             break;
         case 6:
             printf("Command not implemented yet.");
