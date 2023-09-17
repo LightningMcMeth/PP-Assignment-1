@@ -29,6 +29,7 @@ int main() {
         scanf_s("%d", &commandType);
 
         getchar();
+
         switch (*pcommandType){
         case 1:
             
@@ -36,7 +37,6 @@ int main() {
             fgets(userInput, sizeof(userInput), stdin);
 
             if (textLength + atoi(userInput) <= 100) {
-                //strcat_s(userText, userInput);
                 textLength += strlen(userInput);
 
                 userInput[textLength - 1] = '\0';
@@ -45,6 +45,7 @@ int main() {
             }
             else {
                 printf("\ncringe\n");
+                break;
             }
 
             printf("\nText appended successfully: ");
@@ -52,22 +53,48 @@ int main() {
 
             break;
         case 2:
+
             for (int i = 0; i < sizeof(userText); ++i) {
                 printf("%c", userText[i]);
             }
+
             break;
         case 3:
             
             if (textLength < 100) {
                 userText[textLength - 1] = '\n';
             }
+
             printf("Newline added successfully.\n");
+
             break;
         case 4:
-            printf("Command not implemented yet.");
+            
+            FILE* file;
+            file = fopen("userText.txt", "w");
+
+            if (file != NULL) {
+                fputs(userText, file);
+                fclose(file);
+            }
+            printf("Text written to file successfully.\n");
+
             break;
         case 5:
-            printf("Command not implemented yet.");
+            
+            FILE* file;
+            file = fopen("userText.txt", "r");
+
+            if (file == NULL) {
+                printf("Error opening file, or the file is empty.\n");
+                break;
+            }
+
+            while (fgets(userInput, sizeof(userText), file) != NULL) {
+                printf("%s", userInput);
+            }
+            printf("File read successfully.\n");
+
             break;
         case 6:
             printf("Command not implemented yet.");
@@ -78,7 +105,9 @@ int main() {
         case 8:
             break;
         default:
-            printf("Yea no I don't know that command.\n");
+            printf("I don't know that command.\n");
+            printf("List of valid commands:\n");
+            printf(" 1. Append text.\n2.Print text.\n3.Add newline.\n4.Write to file.\n5.Read from file.")
             break;
         }
     }
