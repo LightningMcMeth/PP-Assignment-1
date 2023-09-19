@@ -4,11 +4,28 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-//TODO:
+//https://www.youtube.com/watch?v=wL2FHiBSh2E&ab_channel=UBCECESS
 
-/*
-https://www.youtube.com/watch?v=wL2FHiBSh2E&ab_channel=UBCECESS
-*/
+char** resizeArray(char** userTextArr, int arrRows, int newArrRows) {
+
+    char** newUserTextArr = (char**)calloc(newArrRows, sizeof(char*));
+    for (int i = 0; i < newArrRows; i++) {
+        newUserTextArr[i] = (char*)calloc(100, sizeof(char));
+    }
+
+    for (int i = 0; i < arrRows; i++) {
+        for (int j = 0; j < 100; j++) {
+            newUserTextArr[i][j] = userTextArr[i][j];
+        }
+    }
+
+    for (int i = 0; i < arrRows; i++) {
+        free(userTextArr[i]);
+    }
+    free(userTextArr);
+
+    return newUserTextArr;
+}
 
 int main() {
 
@@ -16,13 +33,13 @@ int main() {
     int* pcommandType = &commandType;
 
     char userInput[100] = "";
-    char userText[100] = "";
+    //char userText[100] = "";
 
     int arrRows = 3;
     char** userTextD = (char**)calloc(arrRows, sizeof(char*));    //rows
     for (int i = 0; i < arrRows; i++) //columns 
     {
-        userTextD[i] = (char*)calloc(100, sizeof(char));
+        userTextD[i] = (char*)calloc(sizeof(userInput), sizeof(char));
     }
 
     int textLength = 0;
@@ -43,31 +60,35 @@ int main() {
             fgets(userInput, sizeof(userInput), stdin);
             userInput[strlen(userInput) - 1] = '\0';
 
-            if (textLength + atoi(userInput) <= 100) {
+            textLength += strlen(userInput);
 
-                textLength += strlen(userInput);
+            if (textLength <= 100) {
 
-                userInput[textLength - 1] = '\0';
+                userInput[textLength] = '\0';   //may need to bring back textLength - 1
 
-                //strcpy_s(userTextD[textRow], sizeof(userInput), userInput);
                 strcat_s(userTextD[textRow], sizeof(userInput), userInput);
             }
-            else if (textRow < arrRows - 1 || textLength + atoi(userInput) >= 100){
+            else if (textRow < arrRows - 1 && textLength >= 100){
 
                 textLength = strlen(userInput);
                 textRow += 1;
 
-                //strcpy_s(userTextD[textRow], sizeof(userInput), userInput);
                 strcat_s(userTextD[textRow], sizeof(userInput), userInput);
 
             }
-            else if (strlen(userInput) >= 100)
+            else if (textLength >= 100 && textRow == arrRows - 1)
             {
-                printf("reallocate some memory or something.\n");
+                //printf("reallocate some memory or something.\n");
+
+
+                userTextD = resizeArray(userTextD, arrRows, arrRows + 2);
+                arrRows += 2;
+
+                strcat_s(userTextD[textRow], sizeof(userInput), userInput);
+
                 break;
             }
 
-            //strcpy_s(userTextD[textRow], sizeof(userInput), userInput);
 
             printf("\nText appended successfully: ");
             printf("%s", userInput);
@@ -78,7 +99,7 @@ int main() {
 
             for (int i = 0; i < arrRows; i++)
             {
-                for (int j = 0; j < 100; j++)
+                for (int j = 0; j < sizeof(userInput); j++)
                 {
                     printf("%c", userTextD[i][j]);
                 }
@@ -87,7 +108,7 @@ int main() {
             break;
         case 3:
             
-            if (textLength < 100) {
+            if (textLength < sizeof(userInput)) {
                 userTextD[textRow][textLength - 1] = '\n';
             }
 
@@ -131,24 +152,15 @@ int main() {
                 fileName[strlen(fileName) - 1] = '\0';
             }
 
-            printf("Enter the file name: ");
-            fgets(userInput, sizeof(userInput), stdin);
-
             errno_t fileErr = fopen_s(&file, fileName, "r");
-
             if (fileErr == 1) {
                 printf("Error opening file, or the file is empty.\n");
                 break;
             }
 
-            /*
-            while (fgets(userInput, sizeof(userText), file) != NULL) {
-                printf("%s", userInput);
-            }*/
-
             for (int i = 0; i < arrRows; i++)
             {
-                if (fgets(userInput, sizeof(userText), file) == NULL)
+                if (fgets(userInput, sizeof(userInput), file) == NULL)
                 {
                     break;
                 }
@@ -160,7 +172,7 @@ int main() {
                 printf("%s", userInput);
             }
 
-            printf("File read successfully.\n");
+            printf("\nFile read successfully.\n");
             break;
         }
         case 6:
@@ -182,62 +194,3 @@ int main() {
 
     return 0;
 }
-
-//char *userTextInput;
-//char arrCapacity = 100;
-//int arrSize = 0;
-//userTextInput = (char *) malloc(arrCapacity * sizeof(char));
-
-
-/*
-            if (strlen(userTextInput) >= arrCapacity / 2) {
-                arrCapacity *= 2;
-                userTextInput = (char *) realloc(userTextInput, arrCapacity * sizeof(char));
-            }
-
-            scanf_s("%99s", &userTextInput, sizeof(userInput));
-            //printf("Your text: ", userInput);
-
-            //strcat(userTextInput, userInput);
-            //arrSize = strlen(userTextInput); //don't know why this is flagged as a warning
-            */
-
-            /*
-                        printf("Enter the file name: ");
-                        fgets(userInput, sizeof(userInput), stdin);
-
-                        for (int i = 0; i < sizeof(userInput); i++)
-                        {
-                            if(userInput[i] == '\n') {
-                                endOfName = true;
-                                userInput[i] = '\0';
-                            }
-
-                            if (endOfName) {
-                                userInput[i] = '\0';
-                            }
-                        }
-                        */
-
-
-/*
-{
-            FILE* file;
-
-            //printf("Enter the file name: ");
-            //fgets(fileName, sizeof(fileName), stdin);
-
-            file = fopen("myfile.txt", "w");
-            for (int i = 0; i < textRow; i++)
-            {
-                fputs(userTextD[i], file);
-            }
-
-            if (fgets(userInput, sizeof(userInput), file) != NULL)
-            {
-                printf("%s", userInput);
-            }
-            fclose(file);
-
-            break;
-        }*/
