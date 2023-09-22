@@ -8,9 +8,9 @@
 
 char** resizeArray(char** userTextArr, int arrRows, int newArrRows) {
 
-    char** newUserTextArr = (char**)calloc(newArrRows, sizeof(char*));
+    char** newUserTextArr = (char**)malloc(newArrRows * sizeof(char*));
     for (int i = 0; i < newArrRows; i++) {
-        newUserTextArr[i] = (char*)calloc(100, sizeof(char));
+        newUserTextArr[i] = (char*)malloc(100 * sizeof(char));
     }
 
     for (int i = 0; i < arrRows; i++) {
@@ -33,13 +33,22 @@ int main() {
     int* pcommandType = &commandType;
 
     char userInput[100] = "";
-    //char userText[100] = "";
 
     int arrRows = 3;
-    char** userTextD = (char**)calloc(arrRows, sizeof(char*));    //rows
+    char** userTextD = (char**)malloc(arrRows * sizeof(char*));    //rows
     for (int i = 0; i < arrRows; i++) //columns 
     {
-        userTextD[i] = (char*)calloc(sizeof(userInput), sizeof(char));
+        userTextD[i] = (char*)malloc(sizeof(userInput) * sizeof(char));
+        userTextD[i][0] = '\0';
+    }
+
+    for (int i = 0; i < arrRows; i++)
+    {
+
+        for (int j = 0; j < 100; j++)
+        {
+            userTextD[i][j] = '\0';
+        }
     }
 
     int textLength = 0;
@@ -53,9 +62,9 @@ int main() {
 
         getchar();
 
-        switch (*pcommandType){
+        switch (*pcommandType) {
         case 1:
-            
+
             printf("Enter text to append:");
             fgets(userInput, sizeof(userInput), stdin);
             userInput[strlen(userInput) - 1] = '\0';
@@ -68,7 +77,7 @@ int main() {
 
                 strcat_s(userTextD[textRow], sizeof(userInput), userInput);
             }
-            else if (textRow < arrRows - 1 && textLength >= 100){
+            else if (textRow < arrRows - 1 && textLength >= 100) {
 
                 textLength = strlen(userInput);
                 textRow += 1;
@@ -78,11 +87,11 @@ int main() {
             }
             else if (textLength >= 100 && textRow == arrRows - 1)
             {
-                //printf("reallocate some memory or something.\n");
+                printf("\n\n       ---=== Allocating more memory ===---\n\n");
 
-
-                userTextD = resizeArray(userTextD, arrRows, arrRows + 2);
                 arrRows += 2;
+                userTextD = resizeArray(userTextD, arrRows, arrRows);
+                //arrRows += 2;
 
                 strcat_s(userTextD[textRow], sizeof(userInput), userInput);
 
@@ -96,20 +105,24 @@ int main() {
             break;
         case 2:
 
-
+            /*
             for (int i = 0; i < arrRows; i++)
             {
                 for (int j = 0; j < sizeof(userInput); j++)
                 {
                     printf("%c", userTextD[i][j]);
                 }
+            }*/
+
+            for (int i = 0; i < arrRows; i++) {
+                printf("%s", userTextD[i]);
             }
 
             break;
         case 3:
-            
+
             if (textLength < sizeof(userInput)) {
-                userTextD[textRow][textLength - 1] = '\n';
+                userTextD[textRow][textLength] = '\n';
             }
 
             printf("Newline added successfully.\n");
@@ -118,8 +131,8 @@ int main() {
         case 4:
         {
             FILE* file;
-            char fileName[25];
-            
+            char fileName[25] = "";
+
             printf("Enter the file name: ");
             fgets(fileName, sizeof(fileName), stdin);
 
@@ -137,13 +150,13 @@ int main() {
                 }
             }
 
-            printf("Text written to file successfully.\n");            
+            printf("Text written to file successfully.\n");
             break;
         }
         case 5:
         {
             FILE* file;
-            char fileName[25];
+            char fileName[25] = "";
 
             printf("Enter the file name: ");
             fgets(fileName, sizeof(fileName), stdin);
@@ -153,13 +166,16 @@ int main() {
             }
 
             errno_t fileErr = fopen_s(&file, fileName, "r");
-            if (fileErr == 1) {
-                printf("Error opening file, or the file is empty.\n");
+            if (fileErr != 0 || file == NULL) {
+                printf("Error opening file. File either empty or doesn't exist.\n");
                 break;
             }
 
+            /*
             for (int i = 0; i < arrRows; i++)
             {
+                fgets(userInput, sizeof(userInput), file);
+                
                 if (fgets(userInput, sizeof(userInput), file) == NULL)
                 {
                     break;
@@ -170,16 +186,21 @@ int main() {
                     userTextD[i][j] = userInput[j];
                 }
                 printf("%s", userInput);
+            }*/
+
+            while (fgets(userInput, sizeof(userInput), file) != NULL) {
+                printf("%s", userInput);
             }
 
             printf("\nFile read successfully.\n");
             break;
         }
         case 6:
-            printf("Command not implemented yet.");
+        {
+            printf("%s", userTextD[1]);
             break;
+        }
         case 7:
-            printf("Command not implemented yet.");
             break;
         case 8:
             system("cls");
