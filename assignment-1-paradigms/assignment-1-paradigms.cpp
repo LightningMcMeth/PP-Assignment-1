@@ -35,8 +35,19 @@ void cleanRow(char** userTextArr, int row) {
     }
 }
 
-int main() {
+void cleanArray(char** userTextArr, int row) {
+    
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < 100; j++)
+        {
+            userTextArr[i][j] = '\0';
+        }
+    }
+}
 
+int main() {
+    //line 50 buffer is too small && 0;
     int commandType = 0;
     int* pcommandType = &commandType;
 
@@ -62,7 +73,6 @@ int main() {
     int textLength = 0;
     int textRow = 0;
 
-
     while (1)
     {
         printf("\nChoose a command:\n");
@@ -81,7 +91,7 @@ int main() {
 
             if (textLength <= 100) {
 
-                //userInput[textLength] = '\0';   //may need to bring back textLength - 1
+                userInput[textLength] = '\0';   //may need to bring back textLength - 1
                 cleanRow(userTextD, textRow);
 
                 strcat_s(userTextD[textRow], sizeof(userInput), userInput);
@@ -92,10 +102,10 @@ int main() {
                 textRow += 1;
 
                 cleanRow(userTextD, textRow);
-                printf("\n printing text row after cleaning it");
-                printf("%s", userTextD[textRow]);
 
                 strcat_s(userTextD[textRow], sizeof(userInput), userInput);
+                userTextD[textRow][100] = '\0';
+                //try accessing index 101, try to break the program on purpose
 
             }
             else if (textLength >= 100 && textRow == arrRows - 1)
@@ -106,6 +116,7 @@ int main() {
                 arrRows += 2;
 
                 strcat_s(userTextD[textRow], sizeof(userInput), userInput);
+                userTextD[textRow][100] = '\0';
 
                 break;
             }
@@ -135,6 +146,7 @@ int main() {
 
             if (textLength < sizeof(userInput)) {
                 userTextD[textRow][textLength] = '\n';
+                //this might be erasing the null-terminator at the end of the line
             }
 
             printf("Newline added successfully.\n");
