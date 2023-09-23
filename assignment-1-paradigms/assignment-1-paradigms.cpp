@@ -27,6 +27,14 @@ char** resizeArray(char** userTextArr, int arrRows, int newArrRows) {
     return newUserTextArr;
 }
 
+void cleanRow(char** userTextArr, int row) {
+
+    for (int i = 0; i < 100; i++)
+    {
+        userTextArr[row][i] = '\0';
+    }
+}
+
 int main() {
 
     int commandType = 0;
@@ -35,7 +43,7 @@ int main() {
     char userInput[100] = "";
 
     int arrRows = 3;
-    char** userTextD = (char**)malloc(arrRows * sizeof(char*));    //rows
+    char** userTextD = (char**)malloc(arrRows * sizeof(char*)); //rows
     for (int i = 0; i < arrRows; i++) //columns 
     {
         userTextD[i] = (char*)malloc(sizeof(userInput) * sizeof(char));
@@ -44,7 +52,7 @@ int main() {
 
     for (int i = 0; i < arrRows; i++)
     {
-
+        //maybe put this loop inside of the memory allocation part. Every time a row is created, it is immedeately filled with \0
         for (int j = 0; j < 100; j++)
         {
             userTextD[i][j] = '\0';
@@ -73,7 +81,8 @@ int main() {
 
             if (textLength <= 100) {
 
-                userInput[textLength] = '\0';   //may need to bring back textLength - 1
+                //userInput[textLength] = '\0';   //may need to bring back textLength - 1
+                cleanRow(userTextD, textRow);
 
                 strcat_s(userTextD[textRow], sizeof(userInput), userInput);
             }
@@ -82,6 +91,10 @@ int main() {
                 textLength = strlen(userInput);
                 textRow += 1;
 
+                cleanRow(userTextD, textRow);
+                printf("\n printing text row after cleaning it");
+                printf("%s", userTextD[textRow]);
+
                 strcat_s(userTextD[textRow], sizeof(userInput), userInput);
 
             }
@@ -89,9 +102,8 @@ int main() {
             {
                 printf("\n\n       ---=== Allocating more memory ===---\n\n");
 
+                userTextD = resizeArray(userTextD, arrRows, arrRows + 2);
                 arrRows += 2;
-                userTextD = resizeArray(userTextD, arrRows, arrRows);
-                //arrRows += 2;
 
                 strcat_s(userTextD[textRow], sizeof(userInput), userInput);
 
