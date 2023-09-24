@@ -54,21 +54,22 @@ int main() {
     char userInput[100] = "";
 
     int arrRows = 3;
-    char** userTextD = (char**)malloc(arrRows * sizeof(char*)); //rows
-    for (int i = 0; i < arrRows; i++) //columns 
+    char** userTextD = (char**)malloc(arrRows * sizeof(char*));
+    for (int i = 0; i < arrRows; i++)
     {
         userTextD[i] = (char*)malloc(sizeof(userInput) * sizeof(char));
         userTextD[i][0] = '\0';
     }
 
+    /*
     for (int i = 0; i < arrRows; i++)
     {
-        //maybe put this loop inside of the memory allocation part. Every time a row is created, it is immedeately filled with \0
+        
         for (int j = 0; j < 100; j++)
         {
             userTextD[i][j] = '\0';
         }
-    }
+    }*/
 
     int textLength = 0;
     int textRow = 0;
@@ -89,10 +90,9 @@ int main() {
 
             textLength += strlen(userInput);
 
-            if (textLength <= 100) {
+            if (textLength < 100) {
 
-                userInput[textLength] = '\0';   //may need to bring back textLength - 1
-                cleanRow(userTextD, textRow);
+                userInput[textLength] = '\0';
 
                 strcat_s(userTextD[textRow], sizeof(userInput), userInput);
             }
@@ -104,7 +104,6 @@ int main() {
                 cleanRow(userTextD, textRow);
 
                 strcat_s(userTextD[textRow], sizeof(userInput), userInput);
-                userTextD[textRow][100] = '\0';
                 //try accessing index 101, try to break the program on purpose
 
             }
@@ -128,28 +127,39 @@ int main() {
             break;
         case 2:
 
-            /*
-            for (int i = 0; i < arrRows; i++)
-            {
-                for (int j = 0; j < sizeof(userInput); j++)
-                {
-                    printf("%c", userTextD[i][j]);
-                }
-            }*/
-
             for (int i = 0; i < arrRows; i++) {
                 printf("%s", userTextD[i]);
             }
 
             break;
         case 3:
-
-            if (textLength < sizeof(userInput)) {
-                userTextD[textRow][textLength] = '\n';
+            
+            if (textLength < 99) {
+                strcat_s(userTextD[textRow], sizeof(userTextD[textRow]), "\n");
                 //this might be erasing the null-terminator at the end of the line
             }
+            else if (textRow < arrRows - 1) {
 
-            printf("Newline added successfully.\n");
+                textRow += 1;
+
+                cleanRow(userTextD, textRow);
+                strcat_s(userTextD[textRow], sizeof(userInput), "\n");
+
+                printf("Newline added successfully.\n");
+            }
+            else {
+                printf("\n\n       ---=== Allocating more memory ===---\n\n");
+
+                userTextD = resizeArray(userTextD, arrRows, arrRows + 2);
+
+                arrRows += 2;
+                textRow += 1;
+
+                cleanRow(userTextD, textRow);
+                strcat_s(userTextD[textRow], sizeof(userInput), "\n");
+
+                printf("Newline added successfully.\n");
+            }
 
             break;
         case 4:
@@ -194,23 +204,6 @@ int main() {
                 printf("Error opening file. File either empty or doesn't exist.\n");
                 break;
             }
-
-            /*
-            for (int i = 0; i < arrRows; i++)
-            {
-                fgets(userInput, sizeof(userInput), file);
-                
-                if (fgets(userInput, sizeof(userInput), file) == NULL)
-                {
-                    break;
-                }
-
-                for (int j = 0; j < 100; j++)
-                {
-                    userTextD[i][j] = userInput[j];
-                }
-                printf("%s", userInput);
-            }*/
 
             while (fgets(userInput, sizeof(userInput), file) != NULL) {
                 printf("%s", userInput);
