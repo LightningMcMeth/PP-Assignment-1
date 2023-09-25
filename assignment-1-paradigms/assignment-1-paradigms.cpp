@@ -74,6 +74,8 @@ int main() {
     int textLength = 0;
     int textRow = 0;
 
+    int rowLen = 98;
+
     while (1)
     {
         printf("\nChoose a command:\n");
@@ -96,7 +98,7 @@ int main() {
 
                 strcat_s(userTextD[textRow], sizeof(userInput), userInput);
             }
-            else if (textRow < arrRows - 1 && textLength >= 100) {
+            else if (textRow < arrRows - 1 && textLength >= rowLen) {
 
                 textLength = strlen(userInput);
                 textRow += 1;
@@ -107,7 +109,7 @@ int main() {
                 //try accessing index 101, try to break the program on purpose
 
             }
-            else if (textLength >= 100 && textRow == arrRows - 1)
+            else if (textLength >= rowLen && textRow == arrRows - 1)
             {
                 printf("\n\n       ---=== Allocating more memory ===---\n\n");
 
@@ -115,7 +117,7 @@ int main() {
                 arrRows += 2;
 
                 strcat_s(userTextD[textRow], sizeof(userInput), userInput);
-                userTextD[textRow][100] = '\0';
+                //userTextD[textRow][100] = '\0';
 
                 break;
             }
@@ -134,9 +136,8 @@ int main() {
             break;
         case 3:
             
-            if (textLength < 99) {
-                strcat_s(userTextD[textRow], sizeof(userTextD[textRow]), "\n");
-                //this might be erasing the null-terminator at the end of the line
+            if (textLength < rowLen) {
+                strcat_s(userTextD[textRow], rowLen, "\n");
             }
             else if (textRow < arrRows - 1) {
 
