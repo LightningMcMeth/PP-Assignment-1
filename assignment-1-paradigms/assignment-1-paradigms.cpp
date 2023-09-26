@@ -47,7 +47,6 @@ void cleanArray(char** userTextArr, int row) {
 }
 
 int main() {
-    //line 50 buffer is too small && 0;
     int commandType = 0;
     int* pcommandType = &commandType;
 
@@ -74,7 +73,7 @@ int main() {
     int textLength = 0;
     int textRow = 0;
 
-    int rowLen = 98;
+    int rowLen = 98; //if there are issues, revert to 98
 
     while (1)
     {
@@ -113,8 +112,13 @@ int main() {
             {
                 printf("\n\n       ---=== Allocating more memory ===---\n\n");
 
-                userTextD = resizeArray(userTextD, arrRows, arrRows + 2);
-                arrRows += 2;
+                userTextD = resizeArray(userTextD, arrRows, arrRows + 3);
+                arrRows += 3;
+                textRow += 1;   //added this at 23:29. Maybe it will fix da program
+                textLength = strlen(userInput);
+                //after reaching this part of the program, when writing to the newly created lines, I get an error saying the string is not null-terminated
+
+                //cleanRow(userTextD, textRow);
 
                 strcat_s(userTextD[textRow], sizeof(userInput), userInput);
                 //userTextD[textRow][100] = '\0';
@@ -137,11 +141,15 @@ int main() {
         case 3:
             
             if (textLength < rowLen) {
+                //if textLength = 97 and rowLen = 98, the code still proceeds, which results in a crash
+                //messing around with the value of rowLen and maybe adding a - 1 to rowLen would help fix the issue.
+                //adding -1 will account for extra space for the null-terminator
                 strcat_s(userTextD[textRow], rowLen, "\n");
             }
             else if (textRow < arrRows - 1) {
 
                 textRow += 1;
+                textLength = 1; //because newline is 1 space
 
                 cleanRow(userTextD, textRow);
                 strcat_s(userTextD[textRow], sizeof(userInput), "\n");
@@ -151,10 +159,11 @@ int main() {
             else {
                 printf("\n\n       ---=== Allocating more memory ===---\n\n");
 
-                userTextD = resizeArray(userTextD, arrRows, arrRows + 2);
+                userTextD = resizeArray(userTextD, arrRows, arrRows + 3);
 
-                arrRows += 2;
+                arrRows += 3;
                 textRow += 1;
+                textLength = 1;
 
                 cleanRow(userTextD, textRow);
                 strcat_s(userTextD[textRow], sizeof(userInput), "\n");
@@ -226,7 +235,7 @@ int main() {
         default:
             printf("I don't know that command.\n");
             printf("List of valid commands:\n");
-            printf(" 1. Append text.\n2.Print text.\n3.Add newline.\n4.Write to file.\n5.Read from file.");
+            printf(" 1. Append text.\n2.Print text.\n3.Add newline.\n4.Write to file.\n5.Read from file.\n8. Clear console");
             break;
         }
     }
