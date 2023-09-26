@@ -11,6 +11,7 @@ char** resizeArray(char** userTextArr, int arrRows, int newArrRows) {
     char** newUserTextArr = (char**)malloc(newArrRows * sizeof(char*));
     for (int i = 0; i < newArrRows; i++) {
         newUserTextArr[i] = (char*)malloc(100 * sizeof(char));
+        newUserTextArr[i][0] = '\0';
     }
 
     for (int i = 0; i < arrRows; i++) {
@@ -19,9 +20,11 @@ char** resizeArray(char** userTextArr, int arrRows, int newArrRows) {
         }
     }
 
+    /*
     for (int i = 0; i < arrRows; i++) {
         free(userTextArr[i]);
-    }
+    }*/
+
     free(userTextArr);
 
     return newUserTextArr;
@@ -73,7 +76,7 @@ int main() {
     int textLength = 0;
     int textRow = 0;
 
-    int rowLen = 98; //if there are issues, revert to 98
+    int rowLen = 99; //if there are issues, revert to 98
 
     while (1)
     {
@@ -105,7 +108,6 @@ int main() {
                 cleanRow(userTextD, textRow);
 
                 strcat_s(userTextD[textRow], sizeof(userInput), userInput);
-                //try accessing index 101, try to break the program on purpose
 
             }
             else if (textLength >= rowLen && textRow == arrRows - 1)
@@ -114,11 +116,12 @@ int main() {
 
                 userTextD = resizeArray(userTextD, arrRows, arrRows + 3);
                 arrRows += 3;
-                textRow += 1;   //added this at 23:29. Maybe it will fix da program
+                textRow += 1;
                 textLength = strlen(userInput);
-                //after reaching this part of the program, when writing to the newly created lines, I get an error saying the string is not null-terminated
 
-                //cleanRow(userTextD, textRow);
+                //after reaching this part of the program, when writing to the newly created lines, I get an error saying the string is not null-terminated
+                //this function adds null-terminators, so all of my stuff should be null-terminated
+                cleanRow(userTextD, textRow);
 
                 strcat_s(userTextD[textRow], sizeof(userInput), userInput);
                 //userTextD[textRow][100] = '\0';
@@ -140,10 +143,13 @@ int main() {
             break;
         case 3:
             
-            if (textLength < rowLen) {
+            if (textLength < rowLen - 1) {
                 //if textLength = 97 and rowLen = 98, the code still proceeds, which results in a crash
                 //messing around with the value of rowLen and maybe adding a - 1 to rowLen would help fix the issue.
                 //adding -1 will account for extra space for the null-terminator
+
+                //add the length of newline and null-terminator
+                textLength += 2;
                 strcat_s(userTextD[textRow], rowLen, "\n");
             }
             else if (textRow < arrRows - 1) {
